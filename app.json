@@ -12,17 +12,29 @@
       "backgroundColor": "#4CAF50"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "NutriScan utilise la caméra pour scanner les codes-barres des produits alimentaires."
+      }
     },
     "android": {
       "package": "com.nutriscan.app",
       "adaptiveIcon": {
         "backgroundColor": "#4CAF50",
         "foregroundImage": "./assets/adaptive-icon.png"
-      }
+      },
+      "permissions": ["android.permission.CAMERA"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "NutriScan utilise la caméra pour scanner les codes-barres des produits alimentaires."
+        }
+      ]
+    ]
   }
 }
