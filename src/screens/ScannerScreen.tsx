@@ -11,20 +11,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   Animated,
-  Image,
-  ScrollView,
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { fetchProductByBarcode } from '../utils/api';
-import { Product } from '../types';
+import { ScannerStackParamList } from '../types';
 import LoadingIndicator from '../components/LoadingIndicator';
 
+type NavigationProp = NativeStackNavigationProp<ScannerStackParamList, 'Scanner'>;
+
 const ScannerScreen: React.FC = () => {
+  const navigation = useNavigation<NavigationProp>();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [product, setProduct] = useState<Product | null>(null);
 
   // Animation du cadre de scan
   const pulseAnim = useRef(new Animated.Value(1)).current;
@@ -53,7 +55,6 @@ const ScannerScreen: React.FC = () => {
     setScanned(true);
     setLoading(true);
     setError(null);
-    setProduct(null);
 
     try {
       const result = await fetchProductByBarcode(data);
@@ -64,7 +65,8 @@ const ScannerScreen: React.FC = () => {
         return;
       }
 
-      setProduct(result);
+      // Naviguer vers la fiche produit
+      navigation.navigate('ProductDetail', { barcode: data, product: result });
     } catch (err) {
       setError('Erreur réseau. Vérifiez votre connexion internet.');
     } finally {
@@ -75,7 +77,6 @@ const ScannerScreen: React.FC = () => {
   const resetScanner = () => {
     setScanned(false);
     setError(null);
-    setProduct(null);
   };
 
   // Permission en cours de chargement
@@ -100,47 +101,6 @@ const ScannerScreen: React.FC = () => {
           <Text style={styles.permissionButtonText}>Autoriser la caméra</Text>
         </TouchableOpacity>
       </View>
-    );
-  }
-
-  // Affichage du résultat après scan
-  if (product) {
-    return (
-      <ScrollView
-        style={styles.resultContainer}
-        contentContainerStyle={styles.resultContent}
-      >
-        {product.image_url ? (
-          <Image source={{ uri: product.image_url }} style={styles.productImage} />
-        ) : (
-          <View style={styles.noImageBox}>
-            <Text style={styles.noImageText}>📷</Text>
-            <Text style={styles.noImageLabel}>Pas d'image</Text>
-          </View>
-        )}
-
-        <Text style={styles.productName}>
-          {product.product_name || 'Produit sans nom'}
-        </Text>
-
-        {product.brands && (
-          <Text style={styles.productBrands}>{product.brands}</Text>
-        )}
-
-        {product.quantity && (
-          <Text style={styles.productQuantity}>{product.quantity}</Text>
-        )}
-
-        <Text style={styles.barcodeText}>Code-barres : {product.code}</Text>
-
-        <TouchableOpacity
-          style={styles.scanAgainButton}
-          onPress={resetScanner}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.scanAgainButtonText}>Scanner un autre produit</Text>
-        </TouchableOpacity>
-      </ScrollView>
     );
   }
 
@@ -356,73 +316,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   permissionButtonText: {
-    color: '#FFFFFF',
-    fontWeight: '700',
-    fontSize: 16,
-  },
-  // Résultat produit
-  resultContainer: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  resultContent: {
-    alignItems: 'center',
-    padding: 24,
-    paddingTop: 60,
-  },
-  productImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 16,
-    marginBottom: 20,
-    backgroundColor: '#e0e0e0',
-  },
-  noImageBox: {
-    width: 200,
-    height: 200,
-    borderRadius: 16,
-    backgroundColor: '#e0e0e0',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  noImageText: {
-    fontSize: 48,
-  },
-  noImageLabel: {
-    fontSize: 14,
-    color: '#999',
-    marginTop: 8,
-  },
-  productName: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#333',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  productBrands: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 4,
-  },
-  productQuantity: {
-    fontSize: 14,
-    color: '#999',
-    marginBottom: 16,
-  },
-  barcodeText: {
-    fontSize: 13,
-    color: '#999',
-    marginBottom: 24,
-  },
-  scanAgainButton: {
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 28,
-    paddingVertical: 14,
-    borderRadius: 10,
-  },
-  scanAgainButtonText: {
     color: '#FFFFFF',
     fontWeight: '700',
     fontSize: 16,

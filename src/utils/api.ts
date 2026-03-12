@@ -48,3 +48,12 @@ export const fetchProductByBarcode = async (barcode: string): Promise<Product | 
     labels_tags: data.product.labels_tags,
   };
 };
+
+/**
+ * Formate une valeur nutritionnelle avec unité
+ */
+export const formatNutrient = (value?: number, unit: string = 'g'): string => {
+  if (value === undefined || value === null) return '—';
+  if (unit === 'kcal') return `${Math.round(value)} kcal`;
+  return `${value.toFixed(1)} ${unit}`;
+};

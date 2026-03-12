@@ -20,6 +20,7 @@ import {
 
 // Screens
 import ScannerScreen from '../screens/ScannerScreen';
+import ProductDetailScreen from '../screens/ProductDetailScreen';
 import SearchScreen from '../screens/SearchScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
@@ -43,6 +44,11 @@ function ScannerStackNavigator() {
         component={ScannerScreen}
         options={{ title: 'Scanner', headerShown: false }}
       />
+      <ScannerStackNav.Screen
+        name="ProductDetail"
+        component={ProductDetailScreen}
+        options={{ title: 'Détail produit' }}
+      />
     </ScannerStackNav.Navigator>
   );
 }
@@ -54,6 +60,11 @@ function SearchStackNavigator() {
         name="Search"
         component={SearchScreen}
         options={{ title: 'Recherche' }}
+      />
+      <SearchStackNav.Screen
+        name="ProductDetail"
+        component={ProductDetailScreen}
+        options={{ title: 'Détail produit' }}
       />
     </SearchStackNav.Navigator>
   );
@@ -67,6 +78,11 @@ function HistoryStackNavigator() {
         component={HistoryScreen}
         options={{ title: 'Historique' }}
       />
+      <HistoryStackNav.Screen
+        name="ProductDetail"
+        component={ProductDetailScreen}
+        options={{ title: 'Détail produit' }}
+      />
     </HistoryStackNav.Navigator>
   );
 }
@@ -78,6 +94,11 @@ function FavoritesStackNavigator() {
         name="Favorites"
         component={FavoritesScreen}
         options={{ title: 'Favoris' }}
+      />
+      <FavoritesStackNav.Screen
+        name="ProductDetail"
+        component={ProductDetailScreen}
+        options={{ title: 'Détail produit' }}
       />
     </FavoritesStackNav.Navigator>
   );
