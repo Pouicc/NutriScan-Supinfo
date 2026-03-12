@@ -69,3 +69,14 @@ export type FavoritesStackParamList = {
 export type SettingsStackParamList = {
   Settings: undefined;
 };
+
+// ==================== RECHERCHE ====================
+
+/** Résultat paginé de l'API Search */
+export interface SearchResult {
+  count: number;
+  page: number;
+  page_count: number;
+  page_size: number;
+  products: Product[];
+}
