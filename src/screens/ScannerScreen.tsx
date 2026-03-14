@@ -17,12 +17,14 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { fetchProductByBarcode } from '../utils/api';
 import { ScannerStackParamList } from '../types';
+import { useData } from '../context/DataContext';
 import LoadingIndicator from '../components/LoadingIndicator';
 
 type NavigationProp = NativeStackNavigationProp<ScannerStackParamList, 'Scanner'>;
 
 const ScannerScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
+  const { addToHistory } = useData();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -66,6 +68,7 @@ const ScannerScreen: React.FC = () => {
       }
 
       // Naviguer vers la fiche produit
+      addToHistory(result);
       navigation.navigate('ProductDetail', { barcode: data, product: result });
     } catch (err) {
       setError('Erreur réseau. Vérifiez votre connexion internet.');

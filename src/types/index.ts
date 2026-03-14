@@ -36,6 +36,14 @@ export interface Product {
   labels_tags?: string[];
 }
 
+// ==================== HISTORIQUE ====================
+
+/** Entrée d'historique : produit + date de scan */
+export interface HistoryEntry {
+  product: Product;
+  scannedAt: string; // ISO date string
+}
+
 // ==================== NAVIGATION ====================
 
 export type RootTabParamList = {
