@@ -44,6 +44,22 @@ export interface HistoryEntry {
   scannedAt: string; // ISO date string
 }
 
+// ==================== FAVORIS ====================
+
+/** Entrée de favori : produit + catégorie + date d'ajout */
+export interface FavoriteEntry {
+  product: Product;
+  category: string;
+  addedAt: string; // ISO date string
+}
+
+/** Catégorie de favoris */
+export interface FavoriteCategory {
+  id: string;
+  name: string;
+  isDefault: boolean;
+}
+
 // ==================== NAVIGATION ====================
 
 export type RootTabParamList = {

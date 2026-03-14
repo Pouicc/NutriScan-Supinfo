@@ -12,6 +12,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Modal,
 } from 'react-native';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -22,6 +23,7 @@ import NutriScoreBadge from '../components/NutriScoreBadge';
 import NovaBadge from '../components/NovaBadge';
 import LoadingIndicator from '../components/LoadingIndicator';
 import { useTranslation } from '../hooks/useTranslation';
+import { useData } from '../context/DataContext';
 
 type RouteProps = RouteProp<ScannerStackParamList, 'ProductDetail'>;
 type NavigationProp = NativeStackNavigationProp<ScannerStackParamList, 'ProductDetail'>;
@@ -30,9 +32,11 @@ const ProductDetailScreen: React.FC = () => {
   const route = useRoute<RouteProps>();
   const navigation = useNavigation<NavigationProp>();
   const { t, lang } = useTranslation();
+  const { addToFavorites, removeFromFavorites, isFavorite, categories } = useData();
   const [product, setProduct] = useState<Product | null>(route.params.product || null);
   const [loading, setLoading] = useState(!route.params.product);
   const [error, setError] = useState<string | null>(null);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
 
   useEffect(() => {
     if (!route.params.product) {
@@ -55,6 +59,22 @@ const ProductDetailScreen: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleToggleFavorite = () => {
+    if (!product) return;
+    if (isFavorite(product.code)) {
+      removeFromFavorites(product.code);
+    } else {
+      setShowCategoryModal(true);
+    }
+  };
+
+  const handleSelectCategory = (categoryId: string) => {
+    if (product) {
+      addToFavorites(product, categoryId);
+    }
+    setShowCategoryModal(false);
   };
 
   if (loading) {
@@ -182,6 +202,43 @@ const ProductDetailScreen: React.FC = () => {
         <Text style={styles.compareIcon}>⚖️</Text>
         <Text style={styles.compareText}>{t('compare')}</Text>
       </TouchableOpacity>
+
+      {/* Bouton favori */}
+      <TouchableOpacity
+        style={[styles.favoriteButton, isFavorite(product.code) && styles.favoriteButtonActive]}
+        onPress={handleToggleFavorite}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.favoriteIcon}>{isFavorite(product.code) ? '❤️' : '🤍'}</Text>
+        <Text style={[styles.favoriteText, isFavorite(product.code) && styles.favoriteTextActive]}>
+          {isFavorite(product.code) ? t('removeFromFavorites') : t('addToFavorites')}
+        </Text>
+      </TouchableOpacity>
+
+      {/* Modal : Choisir une catégorie */}
+      <Modal visible={showCategoryModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{t('selectCategory')}</Text>
+            {categories.map((cat) => (
+              <TouchableOpacity
+                key={cat.id}
+                style={styles.categoryOption}
+                onPress={() => handleSelectCategory(cat.id)}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.categoryOptionText}>{cat.name}</Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={styles.modalCancelButton}
+              onPress={() => setShowCategoryModal(false)}
+            >
+              <Text style={styles.modalCancelText}>{t('cancel')}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <View style={{ height: 40 }} />
     </ScrollView>
@@ -334,6 +391,74 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#4CAF50',
+  },
+  favoriteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 16,
+    marginTop: 8,
+    paddingVertical: 14,
+    borderRadius: 12,
+    backgroundColor: '#FFF0F0',
+    gap: 8,
+  },
+  favoriteButtonActive: {
+    backgroundColor: '#FFEBEE',
+  },
+  favoriteIcon: {
+    fontSize: 20,
+  },
+  favoriteText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#E57373',
+  },
+  favoriteTextActive: {
+    color: '#EF4444',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  categoryOption: {
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  categoryOptionText: {
+    fontSize: 15,
+    color: '#333',
+    fontWeight: '500',
+  },
+  modalCancelButton: {
+    marginTop: 12,
+    paddingVertical: 12,
+    borderRadius: 10,
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
+  },
+  modalCancelText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#6B7280',
   },
   errorContainer: {
     flex: 1,

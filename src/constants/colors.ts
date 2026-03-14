@@ -3,7 +3,7 @@
  * Constantes partagées dans toute l'application
  */
 
-import { ThemeColors } from '../types';
+import { ThemeColors, FavoriteCategory } from '../types';
 
 // Couleurs Nutri-Score
 export const NUTRISCORE_COLORS: Record<string, string> = {
@@ -72,6 +72,14 @@ export const ALLERGENS_LIST = [
   { key: 'mustard', labelFr: 'Moutarde', labelEn: 'Mustard', tag: 'en:mustard' },
   { key: 'lupin', labelFr: 'Lupin', labelEn: 'Lupin', tag: 'en:lupin' },
 ] as const;
+
+// Catégories de favoris par défaut
+export const DEFAULT_FAVORITE_CATEGORIES: FavoriteCategory[] = [
+  { id: 'uncategorized', name: 'Sans catégorie', isDefault: true },
+  { id: 'breakfast', name: 'Petit-déjeuner', isDefault: true },
+  { id: 'healthy-snacks', name: 'Snacks sains', isDefault: true },
+  { id: 'to-avoid', name: 'À éviter', isDefault: true },
+];
 
 // Régimes alimentaires
 export const DIETS_LIST = [

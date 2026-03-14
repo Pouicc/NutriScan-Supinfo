@@ -59,6 +59,19 @@ export const translations = {
     // Favorites
     emptyFavorites: 'Aucun favori',
     emptyFavoritesMsg: 'Ajoutez des produits depuis leur fiche !',
+    allCategories: 'Toutes',
+    newCategory: 'Nouvelle catégorie',
+    categoryName: 'Nom de la catégorie',
+    create: 'Créer',
+    delete: 'Supprimer',
+    moveToCategory: 'Déplacer vers...',
+    deleteCategory: 'Supprimer la catégorie',
+    selectCategory: 'Choisir une catégorie',
+    searchCategory: 'Rechercher une catégorie...',
+    addToFavorites: 'Ajouter aux favoris',
+    removeFromFavorites: 'Retirer des favoris',
+    deleteCategoryConfirm: 'Supprimer cette catégorie ? Les produits seront déplacés dans « Sans catégorie ».',
+    categoryExists: 'Cette catégorie existe déjà.',
 
     // Additional
     retry: 'Réessayer',
@@ -158,6 +171,19 @@ export const translations = {
     // Favorites
     emptyFavorites: 'No favorites',
     emptyFavoritesMsg: 'Add products from their detail page!',
+    allCategories: 'All',
+    newCategory: 'New category',
+    categoryName: 'Category name',
+    create: 'Create',
+    delete: 'Delete',
+    moveToCategory: 'Move to...',
+    deleteCategory: 'Delete category',
+    selectCategory: 'Choose a category',
+    searchCategory: 'Search a category...',
+    addToFavorites: 'Add to favorites',
+    removeFromFavorites: 'Remove from favorites',
+    deleteCategoryConfirm: 'Delete this category? Products will be moved to "Uncategorized".',
+    categoryExists: 'This category already exists.',
 
     // Additional
     retry: 'Retry',
