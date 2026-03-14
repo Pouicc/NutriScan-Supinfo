@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTranslation } from '../hooks/useTranslation';
 
 const FavoritesScreen: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.emoji}>⭐</Text>
-      <Text style={styles.title}>Favoris</Text>
-      <Text style={styles.subtitle}>Ajoutez des produits à vos favoris</Text>
+      <Text style={styles.title}>{t('favorites')}</Text>
+      <Text style={styles.subtitle}>{t('addFavoritesHint')}</Text>
     </View>
   );
 };

@@ -78,6 +78,56 @@ export type SettingsStackParamList = {
   Settings: undefined;
 };
 
+// ==================== THÈME ====================
+
+/** Couleurs d'un thème (clair ou sombre) */
+export interface ThemeColors {
+  background: string;
+  surface: string;
+  card: string;
+  text: string;
+  textSecondary: string;
+  border: string;
+  primary: string;
+  accent: string;
+  error: string;
+  success: string;
+  warning: string;
+}
+
+// ==================== ALLERGÈNES & RÉGIMES ====================
+
+/** Allergène prédéfini */
+export type Allergen =
+  | 'gluten'
+  | 'milk'
+  | 'eggs'
+  | 'peanuts'
+  | 'nuts'
+  | 'soy'
+  | 'fish'
+  | 'crustaceans'
+  | 'sesame'
+  | 'sulphites'
+  | 'celery'
+  | 'mustard'
+  | 'lupin';
+
+/** Régime alimentaire */
+export type DietaryPreference =
+  | 'vegetarian'
+  | 'vegan'
+  | 'gluten-free'
+  | 'halal'
+  | 'kosher';
+
+/** Préférences utilisateur */
+export interface UserPreferences {
+  allergens: Allergen[];
+  dietaryPreferences: DietaryPreference[];
+  language: 'fr' | 'en';
+}
+
 // ==================== RECHERCHE ====================
 
 /** Résultat paginé de l'API Search */

@@ -19,12 +19,14 @@ import { HistoryStackParamList, HistoryEntry } from '../types';
 import { useData } from '../context/DataContext';
 import ProductCard from '../components/ProductCard';
 import EmptyState from '../components/EmptyState';
+import { useTranslation } from '../hooks/useTranslation';
 
 type NavigationProp = NativeStackNavigationProp<HistoryStackParamList, 'History'>;
 
 const HistoryScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const { history, removeFromHistory, clearHistory } = useData();
+  const { t, lang } = useTranslation();
 
   const handleProductPress = (entry: HistoryEntry) => {
     navigation.navigate('ProductDetail', {
@@ -39,18 +41,18 @@ const HistoryScreen: React.FC = () => {
 
   const handleClearAll = () => {
     Alert.alert(
-      'Vider l\'historique',
-      'Êtes-vous sûr de vouloir supprimer tout l\'historique ?',
+      t('clearHistoryTitle'),
+      t('clearHistoryConfirm'),
       [
-        { text: 'Annuler', style: 'cancel' },
-        { text: 'Confirmer', style: 'destructive', onPress: clearHistory },
+        { text: t('cancel'), style: 'cancel' },
+        { text: t('confirm'), style: 'destructive', onPress: clearHistory },
       ]
     );
   };
 
   const formatDate = (isoDate: string) => {
     const date = new Date(isoDate);
-    return date.toLocaleDateString('fr-FR', {
+    return date.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -63,7 +65,7 @@ const HistoryScreen: React.FC = () => {
     <ProductCard
       product={item.product}
       onPress={() => handleProductPress(item)}
-      subtitle={`Scanné le ${formatDate(item.scannedAt)}`}
+      subtitle={`${t('scannedOn')} ${formatDate(item.scannedAt)}`}
       rightAction={
         <TouchableOpacity
           onPress={() => handleDelete(item.product.code)}
@@ -87,7 +89,7 @@ const HistoryScreen: React.FC = () => {
             activeOpacity={0.7}
           >
             <Text style={styles.clearBtnIcon}>🗑️</Text>
-            <Text style={styles.clearBtnText}>Vider l'historique</Text>
+            <Text style={styles.clearBtnText}>{t('clearHistory')}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -96,8 +98,8 @@ const HistoryScreen: React.FC = () => {
       {history.length === 0 ? (
         <EmptyState
           icon="📋"
-          title="Historique vide"
-          message="Les produits que vous scannez apparaîtront ici automatiquement"
+          title={t('emptyHistory')}
+          message={t('emptyHistoryMsg')}
         />
       ) : (
         <FlatList

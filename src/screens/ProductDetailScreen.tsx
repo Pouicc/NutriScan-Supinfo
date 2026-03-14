@@ -19,11 +19,13 @@ import { formatNutrient } from '../utils/api';
 import NutriScoreBadge from '../components/NutriScoreBadge';
 import NovaBadge from '../components/NovaBadge';
 import LoadingIndicator from '../components/LoadingIndicator';
+import { useTranslation } from '../hooks/useTranslation';
 
 type RouteProps = RouteProp<ScannerStackParamList, 'ProductDetail'>;
 
 const ProductDetailScreen: React.FC = () => {
   const route = useRoute<RouteProps>();
+  const { t, lang } = useTranslation();
   const [product, setProduct] = useState<Product | null>(route.params.product || null);
   const [loading, setLoading] = useState(!route.params.product);
   const [error, setError] = useState<string | null>(null);
@@ -38,28 +40,28 @@ const ProductDetailScreen: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const p = await fetchProductByBarcode(route.params.barcode);
+      const p = await fetchProductByBarcode(route.params.barcode, lang);
       if (!p) {
-        setError('Produit non trouvé dans la base Open Food Facts.');
+        setError(t('productNotFoundMsg'));
       } else {
         setProduct(p);
       }
     } catch (err) {
-      setError('Erreur réseau. Vérifiez votre connexion internet.');
+      setError(t('networkErrorMsg'));
     } finally {
       setLoading(false);
     }
   };
 
   if (loading) {
-    return <LoadingIndicator fullscreen message="Chargement du produit..." />;
+    return <LoadingIndicator fullscreen message={t('loadingProduct')} />;
   }
 
   if (error || !product) {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorIcon}>⚠️</Text>
-        <Text style={styles.errorText}>{error || 'Produit introuvable.'}</Text>
+        <Text style={styles.errorText}>{error || t('productNotFound')}</Text>
       </View>
     );
   }
@@ -68,14 +70,14 @@ const ProductDetailScreen: React.FC = () => {
   const nutriments = product.nutriments;
 
   const nutritionData = [
-    { label: 'Énergie', value: formatNutrient(nutriments?.['energy-kcal_100g'], 'kcal') },
-    { label: 'Matières grasses', value: formatNutrient(nutriments?.fat_100g) },
-    { label: 'Acides gras saturés', value: formatNutrient(nutriments?.['saturated-fat_100g']), indent: true },
-    { label: 'Glucides', value: formatNutrient(nutriments?.carbohydrates_100g) },
-    { label: 'Sucres', value: formatNutrient(nutriments?.sugars_100g), indent: true },
-    { label: 'Fibres', value: formatNutrient(nutriments?.fiber_100g) },
-    { label: 'Protéines', value: formatNutrient(nutriments?.proteins_100g) },
-    { label: 'Sel', value: formatNutrient(nutriments?.salt_100g) },
+    { label: t('energy'), value: formatNutrient(nutriments?.['energy-kcal_100g'], 'kcal') },
+    { label: t('fat'), value: formatNutrient(nutriments?.fat_100g) },
+    { label: t('saturatedFat'), value: formatNutrient(nutriments?.['saturated-fat_100g']), indent: true },
+    { label: t('carbohydrates'), value: formatNutrient(nutriments?.carbohydrates_100g) },
+    { label: t('sugars'), value: formatNutrient(nutriments?.sugars_100g), indent: true },
+    { label: t('fiber'), value: formatNutrient(nutriments?.fiber_100g) },
+    { label: t('proteins'), value: formatNutrient(nutriments?.proteins_100g) },
+    { label: t('salt'), value: formatNutrient(nutriments?.salt_100g) },
   ];
 
   return (
@@ -86,14 +88,14 @@ const ProductDetailScreen: React.FC = () => {
       ) : (
         <View style={[styles.productImage, styles.placeholderImage]}>
           <Text style={styles.placeholderText}>📦</Text>
-          <Text style={styles.placeholderLabel}>Pas d'image disponible</Text>
+          <Text style={styles.placeholderLabel}>{t('noImageAvailable')}</Text>
         </View>
       )}
 
       {/* Nom, marque, quantité */}
       <View style={styles.headerSection}>
         <Text style={styles.productName}>
-          {product.product_name || 'Produit sans nom'}
+          {product.product_name || t('unknownProduct')}
         </Text>
         {product.brands && (
           <Text style={styles.productBrand}>{product.brands}</Text>
@@ -106,19 +108,19 @@ const ProductDetailScreen: React.FC = () => {
       {/* Scores : Nutri-Score + NOVA */}
       <View style={styles.scoresSection}>
         <View style={styles.scoreItem}>
-          <Text style={styles.scoreLabel}>NUTRI-SCORE</Text>
+          <Text style={styles.scoreLabel}>{t('nutriScore').toUpperCase()}</Text>
           <NutriScoreBadge grade={product.nutriscore_grade} size="large" />
         </View>
 
         <View style={styles.scoreItem}>
-          <Text style={styles.scoreLabel}>GROUPE NOVA</Text>
+          <Text style={styles.scoreLabel}>{t('novaGroup').toUpperCase()}</Text>
           <NovaBadge group={product.nova_group} showDescription size="medium" />
         </View>
       </View>
 
       {/* Tableau nutritionnel */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Valeurs nutritionnelles (pour 100g)</Text>
+        <Text style={styles.sectionTitle}>{t('nutritionTitle')}</Text>
         {nutritionData.map((row, index) => (
           <View
             key={row.label}
@@ -143,14 +145,14 @@ const ProductDetailScreen: React.FC = () => {
       {/* Ingrédients */}
       {product.ingredients_text && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Ingrédients</Text>
+          <Text style={styles.sectionTitle}>{t('ingredients')}</Text>
           <Text style={styles.ingredientsText}>{product.ingredients_text}</Text>
         </View>
       )}
 
       {/* Allergènes */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Allergènes</Text>
+        <Text style={styles.sectionTitle}>{t('allergens')}</Text>
         {product.allergens_tags && product.allergens_tags.length > 0 ? (
           <View style={styles.allergensList}>
             {product.allergens_tags.map((tag) => {
@@ -163,7 +165,7 @@ const ProductDetailScreen: React.FC = () => {
             })}
           </View>
         ) : (
-          <Text style={styles.noAllergens}>Aucun allergène déclaré.</Text>
+          <Text style={styles.noAllergens}>{t('noAllergensDeclared')}</Text>
         )}
       </View>
 

@@ -8,6 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, Platform } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
+import { useTranslation } from '../hooks/useTranslation';
 
 import {
   RootTabParamList,
@@ -37,8 +39,15 @@ const SettingsStackNav = createNativeStackNavigator<SettingsStackParamList>();
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 function ScannerStackNavigator() {
+  const { colors } = useTheme();
   return (
-    <ScannerStackNav.Navigator>
+    <ScannerStackNav.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.card },
+        headerTintColor: colors.text,
+        headerTitleStyle: { color: colors.text },
+      }}
+    >
       <ScannerStackNav.Screen
         name="Scanner"
         component={ScannerScreen}
@@ -54,8 +63,15 @@ function ScannerStackNavigator() {
 }
 
 function SearchStackNavigator() {
+  const { colors } = useTheme();
   return (
-    <SearchStackNav.Navigator>
+    <SearchStackNav.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.card },
+        headerTintColor: colors.text,
+        headerTitleStyle: { color: colors.text },
+      }}
+    >
       <SearchStackNav.Screen
         name="Search"
         component={SearchScreen}
@@ -71,8 +87,15 @@ function SearchStackNavigator() {
 }
 
 function HistoryStackNavigator() {
+  const { colors } = useTheme();
   return (
-    <HistoryStackNav.Navigator>
+    <HistoryStackNav.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.card },
+        headerTintColor: colors.text,
+        headerTitleStyle: { color: colors.text },
+      }}
+    >
       <HistoryStackNav.Screen
         name="History"
         component={HistoryScreen}
@@ -88,8 +111,15 @@ function HistoryStackNavigator() {
 }
 
 function FavoritesStackNavigator() {
+  const { colors } = useTheme();
   return (
-    <FavoritesStackNav.Navigator>
+    <FavoritesStackNav.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.card },
+        headerTintColor: colors.text,
+        headerTitleStyle: { color: colors.text },
+      }}
+    >
       <FavoritesStackNav.Screen
         name="Favorites"
         component={FavoritesScreen}
@@ -105,8 +135,15 @@ function FavoritesStackNavigator() {
 }
 
 function SettingsStackNavigator() {
+  const { colors } = useTheme();
   return (
-    <SettingsStackNav.Navigator>
+    <SettingsStackNav.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.card },
+        headerTintColor: colors.text,
+        headerTitleStyle: { color: colors.text },
+      }}
+    >
       <SettingsStackNav.Screen
         name="Settings"
         component={SettingsScreen}
@@ -127,16 +164,19 @@ const TabIcon = ({ emoji, focused }: { emoji: string; focused: boolean; color: s
 // ==================== MAIN NAVIGATOR ====================
 
 const AppNavigator: React.FC = () => {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+
   return (
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: '#4CAF50',
-          tabBarInactiveTintColor: '#999',
+          tabBarActiveTintColor: colors.primary,
+          tabBarInactiveTintColor: colors.textSecondary,
           tabBarStyle: {
-            backgroundColor: '#fff',
-            borderTopColor: '#e0e0e0',
+            backgroundColor: colors.card,
+            borderTopColor: colors.border,
             paddingBottom: Platform.OS === 'ios' ? 20 : 8,
             paddingTop: 8,
             height: Platform.OS === 'ios' ? 88 : 68,
@@ -151,7 +191,7 @@ const AppNavigator: React.FC = () => {
           name="ScannerTab"
           component={ScannerStackNavigator}
           options={{
-            tabBarLabel: 'Scanner',
+            tabBarLabel: t('scanner'),
             tabBarIcon: ({ focused, color }) => (
               <TabIcon emoji="📷" focused={focused} color={color} />
             ),
@@ -161,7 +201,7 @@ const AppNavigator: React.FC = () => {
           name="SearchTab"
           component={SearchStackNavigator}
           options={{
-            tabBarLabel: 'Recherche',
+            tabBarLabel: t('search'),
             tabBarIcon: ({ focused, color }) => (
               <TabIcon emoji="🔍" focused={focused} color={color} />
             ),
@@ -171,7 +211,7 @@ const AppNavigator: React.FC = () => {
           name="HistoryTab"
           component={HistoryStackNavigator}
           options={{
-            tabBarLabel: 'Historique',
+            tabBarLabel: t('history'),
             tabBarIcon: ({ focused, color }) => (
               <TabIcon emoji="📋" focused={focused} color={color} />
             ),
@@ -181,7 +221,7 @@ const AppNavigator: React.FC = () => {
           name="FavoritesTab"
           component={FavoritesStackNavigator}
           options={{
-            tabBarLabel: 'Favoris',
+            tabBarLabel: t('favorites'),
             tabBarIcon: ({ focused, color }) => (
               <TabIcon emoji="⭐" focused={focused} color={color} />
             ),
@@ -191,7 +231,7 @@ const AppNavigator: React.FC = () => {
           name="SettingsTab"
           component={SettingsStackNavigator}
           options={{
-            tabBarLabel: 'Paramètres',
+            tabBarLabel: t('settings'),
             tabBarIcon: ({ focused, color }) => (
               <TabIcon emoji="⚙️" focused={focused} color={color} />
             ),

@@ -18,6 +18,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { fetchProductByBarcode } from '../utils/api';
 import { ScannerStackParamList } from '../types';
 import { useData } from '../context/DataContext';
+import { useTranslation } from '../hooks/useTranslation';
 import LoadingIndicator from '../components/LoadingIndicator';
 
 type NavigationProp = NativeStackNavigationProp<ScannerStackParamList, 'Scanner'>;
@@ -25,6 +26,7 @@ type NavigationProp = NativeStackNavigationProp<ScannerStackParamList, 'Scanner'
 const ScannerScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const { addToHistory } = useData();
+  const { t, lang } = useTranslation();
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -59,10 +61,10 @@ const ScannerScreen: React.FC = () => {
     setError(null);
 
     try {
-      const result = await fetchProductByBarcode(data);
+      const result = await fetchProductByBarcode(data, lang);
 
       if (!result) {
-        setError('Produit non trouvé dans la base Open Food Facts.');
+        setError(t('productNotFoundMsg'));
         setLoading(false);
         return;
       }
@@ -71,7 +73,7 @@ const ScannerScreen: React.FC = () => {
       addToHistory(result);
       navigation.navigate('ProductDetail', { barcode: data, product: result });
     } catch (err) {
-      setError('Erreur réseau. Vérifiez votre connexion internet.');
+      setError(t('networkErrorMsg'));
     } finally {
       setLoading(false);
     }
@@ -84,7 +86,7 @@ const ScannerScreen: React.FC = () => {
 
   // Permission en cours de chargement
   if (!permission) {
-    return <LoadingIndicator fullscreen message="Chargement..." />;
+    return <LoadingIndicator fullscreen message={t('loading')} />;
   }
 
   // Permission refusée
@@ -92,16 +94,16 @@ const ScannerScreen: React.FC = () => {
     return (
       <View style={styles.permissionContainer}>
         <Text style={styles.permissionIcon}>📷</Text>
-        <Text style={styles.permissionTitle}>Accès caméra requis</Text>
+        <Text style={styles.permissionTitle}>{t('cameraPermission')}</Text>
         <Text style={styles.permissionMessage}>
-          NutriScan a besoin d'accéder à votre caméra pour scanner les codes-barres des produits alimentaires.
+          {t('cameraPermissionMsg')}
         </Text>
         <TouchableOpacity
           style={styles.permissionButton}
           onPress={requestPermission}
           activeOpacity={0.7}
         >
-          <Text style={styles.permissionButtonText}>Autoriser la caméra</Text>
+          <Text style={styles.permissionButtonText}>{t('grantPermission')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -121,8 +123,8 @@ const ScannerScreen: React.FC = () => {
       {/* Overlay sombre avec cadre de scan */}
       <View style={styles.overlay}>
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Scanner un produit</Text>
-          <Text style={styles.headerSubtitle}>Placez le code-barres dans le cadre</Text>
+          <Text style={styles.headerTitle}>{t('scannerTitle')}</Text>
+          <Text style={styles.headerSubtitle}>{t('scannerSubtitle')}</Text>
         </View>
 
         <Animated.View
@@ -137,7 +139,7 @@ const ScannerScreen: React.FC = () => {
         <View style={styles.bottomArea}>
           {loading && (
             <View style={styles.loadingBox}>
-              <LoadingIndicator message="Recherche du produit..." />
+              <LoadingIndicator message={t('scanning')} />
             </View>
           )}
 
@@ -149,7 +151,7 @@ const ScannerScreen: React.FC = () => {
                 onPress={resetScanner}
                 activeOpacity={0.7}
               >
-                <Text style={styles.retryButtonText}>Réessayer</Text>
+                <Text style={styles.retryButtonText}>{t('retry')}</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -160,7 +162,7 @@ const ScannerScreen: React.FC = () => {
               onPress={resetScanner}
               activeOpacity={0.7}
             >
-              <Text style={styles.rescanButtonText}>Scanner à nouveau</Text>
+              <Text style={styles.rescanButtonText}>{t('scanAgain')}</Text>
             </TouchableOpacity>
           )}
         </View>

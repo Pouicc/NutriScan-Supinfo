@@ -18,6 +18,7 @@ import { SearchStackParamList, Product } from '../types';
 import { useProductSearch } from '../hooks/useProductSearch';
 import ProductCard from '../components/ProductCard';
 import EmptyState from '../components/EmptyState';
+import { useTranslation } from '../hooks/useTranslation';
 
 type NavigationProp = NativeStackNavigationProp<SearchStackParamList, 'Search'>;
 
@@ -25,6 +26,7 @@ const SearchScreen: React.FC = () => {
   const navigation = useNavigation<NavigationProp>();
   const [query, setQuery] = useState('');
   const { results, loading, error, searchMore, hasMore, totalCount } = useProductSearch(query);
+  const { t } = useTranslation();
 
   const handleProductPress = (product: Product) => {
     navigation.navigate('ProductDetail', { barcode: product.code, product });
@@ -54,7 +56,7 @@ const SearchScreen: React.FC = () => {
           <Text style={styles.searchIcon}>🔍</Text>
           <TextInput
             style={styles.searchInput}
-            placeholder="Rechercher un produit..."
+            placeholder={t('searchPlaceholder')}
             placeholderTextColor="#999"
             value={query}
             onChangeText={setQuery}
@@ -73,27 +75,27 @@ const SearchScreen: React.FC = () => {
         </View>
         {totalCount > 0 && (
           <Text style={styles.resultCount}>
-            {totalCount} résultats
+            {totalCount} {t('resultsCount')}
           </Text>
         )}
       </View>
 
       {/* Contenu */}
       {error ? (
-        <EmptyState icon="⚠️" title="Erreur" message={error} />
+        <EmptyState icon="⚠️" title={t('networkError')} message={error} />
       ) : query.length < 2 ? (
         <EmptyState
           icon="🔍"
-          title="Recherche"
-          message="Tapez au moins 2 caractères pour rechercher un produit par nom ou marque"
+          title={t('search')}
+          message={t('searchMinChars')}
         />
       ) : loading && results.length === 0 ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#4CAF50" />
-          <Text style={styles.loadingText}>Recherche en cours...</Text>
+          <Text style={styles.loadingText}>{t('searchLoading')}</Text>
         </View>
       ) : results.length === 0 ? (
-        <EmptyState icon="😕" title="Aucun résultat" message="Essayez avec d'autres mots-clés" />
+        <EmptyState icon="😕" title={t('noResults')} message={t('noResultsMsg')} />
       ) : (
         <FlatList
           data={results}

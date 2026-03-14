@@ -15,8 +15,8 @@ const defaultHeaders = {
 /**
  * Récupère un produit par son code-barres
  */
-export const fetchProductByBarcode = async (barcode: string): Promise<Product | null> => {
-  const response = await fetch(`${API_BASE_URL}/api/v2/product/${encodeURIComponent(barcode)}.json`, {
+export const fetchProductByBarcode = async (barcode: string, lang: string = 'fr'): Promise<Product | null> => {
+  const response = await fetch(`${API_BASE_URL}/api/v2/product/${encodeURIComponent(barcode)}.json?lc=${lang}`, {
     headers: defaultHeaders,
   });
 
@@ -56,13 +56,15 @@ export const fetchProductByBarcode = async (barcode: string): Promise<Product | 
 export const searchProducts = async (
   query: string,
   page: number = 1,
-  pageSize: number = 20
+  pageSize: number = 20,
+  lang: string = 'fr'
 ): Promise<SearchResult> => {
   const params = new URLSearchParams({
     search_terms: query,
     json: '1',
     page: String(page),
     page_size: String(pageSize),
+    lc: lang,
     fields: 'code,product_name,brands,quantity,image_front_small_url,image_url,nutriscore_grade,nova_group,ecoscore_grade,nutriments,ingredients_text,allergens_tags,categories_tags,labels_tags',
   });
 

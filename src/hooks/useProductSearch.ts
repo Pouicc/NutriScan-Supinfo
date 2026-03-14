@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { Product } from '../types';
 import { searchProducts } from '../utils/api';
 import { useDebounce } from './useDebounce';
+import { usePreferences } from '../context/PreferencesContext';
 
 interface UseProductSearchResult {
   results: Product[];
@@ -18,6 +19,8 @@ interface UseProductSearchResult {
 }
 
 export const useProductSearch = (query: string): UseProductSearchResult => {
+  const { preferences } = usePreferences();
+  const lang = preferences.language;
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +46,7 @@ export const useProductSearch = (query: string): UseProductSearchResult => {
       setPage(1);
 
       try {
-        const data = await searchProducts(debouncedQuery, 1);
+        const data = await searchProducts(debouncedQuery, 1, 20, lang);
         setResults(data.products);
         setTotalCount(data.count);
         setHasMore(data.page < data.page_count);
@@ -56,7 +59,7 @@ export const useProductSearch = (query: string): UseProductSearchResult => {
     };
 
     search();
-  }, [debouncedQuery]);
+  }, [debouncedQuery, lang]);
 
   // Charger plus de résultats (pagination)
   const searchMore = async () => {
@@ -66,7 +69,7 @@ export const useProductSearch = (query: string): UseProductSearchResult => {
     setLoading(true);
 
     try {
-      const data = await searchProducts(debouncedQuery, nextPage);
+      const data = await searchProducts(debouncedQuery, nextPage, 20, lang);
       setResults((prev) => [...prev, ...data.products]);
       setPage(nextPage);
       setHasMore(nextPage < data.page_count);

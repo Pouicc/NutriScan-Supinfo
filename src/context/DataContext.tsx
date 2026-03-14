@@ -12,6 +12,7 @@ interface DataContextType {
   addToHistory: (product: Product) => void;
   removeFromHistory: (barcode: string) => void;
   clearHistory: () => void;
+  resetAllData: () => void;
 }
 
 const DataContext = createContext<DataContextType>({
@@ -19,6 +20,7 @@ const DataContext = createContext<DataContextType>({
   addToHistory: () => {},
   removeFromHistory: () => {},
   clearHistory: () => {},
+  resetAllData: () => {},
 });
 
 const HISTORY_KEY = '@nutriscan_history';
@@ -70,8 +72,14 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify([]));
   }, []);
 
+  // Réinitialiser toutes les données
+  const resetAllData = useCallback(async () => {
+    setHistory([]);
+    await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify([]));
+  }, []);
+
   return (
-    <DataContext.Provider value={{ history, addToHistory, removeFromHistory, clearHistory }}>
+    <DataContext.Provider value={{ history, addToHistory, removeFromHistory, clearHistory, resetAllData }}>
       {children}
     </DataContext.Provider>
   );
