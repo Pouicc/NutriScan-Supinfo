@@ -10,9 +10,11 @@ import {
   Text,
   Image,
   ScrollView,
+  TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScannerStackParamList, Product } from '../types';
 import { fetchProductByBarcode } from '../utils/api';
 import { formatNutrient } from '../utils/api';
@@ -22,9 +24,11 @@ import LoadingIndicator from '../components/LoadingIndicator';
 import { useTranslation } from '../hooks/useTranslation';
 
 type RouteProps = RouteProp<ScannerStackParamList, 'ProductDetail'>;
+type NavigationProp = NativeStackNavigationProp<ScannerStackParamList, 'ProductDetail'>;
 
 const ProductDetailScreen: React.FC = () => {
   const route = useRoute<RouteProps>();
+  const navigation = useNavigation<NavigationProp>();
   const { t, lang } = useTranslation();
   const [product, setProduct] = useState<Product | null>(route.params.product || null);
   const [loading, setLoading] = useState(!route.params.product);
@@ -169,6 +173,16 @@ const ProductDetailScreen: React.FC = () => {
         )}
       </View>
 
+      {/* Bouton comparer */}
+      <TouchableOpacity
+        style={styles.compareButton}
+        onPress={() => navigation.navigate('Comparator', { product1: product })}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.compareIcon}>⚖️</Text>
+        <Text style={styles.compareText}>{t('compare')}</Text>
+      </TouchableOpacity>
+
       <View style={{ height: 40 }} />
     </ScrollView>
   );
@@ -301,6 +315,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: 'italic',
     color: '#999',
+  },
+  compareButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 16,
+    marginTop: 12,
+    paddingVertical: 14,
+    borderRadius: 12,
+    backgroundColor: '#E8F5E9',
+    gap: 8,
+  },
+  compareIcon: {
+    fontSize: 20,
+  },
+  compareText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#4CAF50',
   },
   errorContainer: {
     flex: 1,

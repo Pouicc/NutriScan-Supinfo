@@ -75,6 +75,17 @@ export const translations = {
     addFavoritesHint: 'Ajoutez des produits à vos favoris',
     noAllergensDeclared: 'Aucun allergène déclaré.',
 
+    // Comparator
+    comparatorTitle: 'Comparateur',
+    compare: 'Comparer',
+    selectProduct: 'Sélectionner un produit',
+    selectFromHistory: 'Choisir depuis l\'historique',
+    vsLabel: 'VS',
+    calories: 'Calories',
+    product1Wins: 'Produit 1 est meilleur !',
+    product2Wins: 'Produit 2 est meilleur !',
+    itsATie: 'C\'est une égalité !',
+
     // Settings
     appearance: 'Apparence',
     darkMode: 'Mode sombre',
@@ -162,6 +173,17 @@ export const translations = {
     clearHistoryConfirm: 'Are you sure you want to delete all history?',
     addFavoritesHint: 'Add products to your favorites',
     noAllergensDeclared: 'No declared allergens.',
+
+    // Comparator
+    comparatorTitle: 'Comparator',
+    compare: 'Compare',
+    selectProduct: 'Select a product',
+    selectFromHistory: 'Choose from history',
+    vsLabel: 'VS',
+    calories: 'Calories',
+    product1Wins: 'Product 1 is better!',
+    product2Wins: 'Product 2 is better!',
+    itsATie: 'It\'s a tie!',
 
     // Settings
     appearance: 'Appearance',

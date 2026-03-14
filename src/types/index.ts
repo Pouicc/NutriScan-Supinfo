@@ -57,21 +57,25 @@ export type RootTabParamList = {
 export type ScannerStackParamList = {
   Scanner: undefined;
   ProductDetail: { barcode: string; product?: Product };
+  Comparator: { product1: Product; product2?: Product };
 };
 
 export type SearchStackParamList = {
   Search: undefined;
   ProductDetail: { barcode: string; product?: Product };
+  Comparator: { product1: Product; product2?: Product };
 };
 
 export type HistoryStackParamList = {
   History: undefined;
   ProductDetail: { barcode: string; product?: Product };
+  Comparator: { product1: Product; product2?: Product };
 };
 
 export type FavoritesStackParamList = {
   Favorites: undefined;
   ProductDetail: { barcode: string; product?: Product };
+  Comparator: { product1: Product; product2?: Product };
 };
 
 export type SettingsStackParamList = {

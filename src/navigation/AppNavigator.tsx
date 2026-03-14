@@ -27,6 +27,7 @@ import SearchScreen from '../screens/SearchScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ComparatorScreen from '../screens/ComparatorScreen';
 
 // ==================== STACK NAVIGATORS ====================
 
@@ -58,6 +59,11 @@ function ScannerStackNavigator() {
         component={ProductDetailScreen}
         options={{ title: 'Détail produit' }}
       />
+      <ScannerStackNav.Screen
+        name="Comparator"
+        component={ComparatorScreen}
+        options={{ title: 'Comparateur' }}
+      />
     </ScannerStackNav.Navigator>
   );
 }
@@ -81,6 +87,11 @@ function SearchStackNavigator() {
         name="ProductDetail"
         component={ProductDetailScreen}
         options={{ title: 'Détail produit' }}
+      />
+      <SearchStackNav.Screen
+        name="Comparator"
+        component={ComparatorScreen}
+        options={{ title: 'Comparateur' }}
       />
     </SearchStackNav.Navigator>
   );
@@ -106,6 +117,11 @@ function HistoryStackNavigator() {
         component={ProductDetailScreen}
         options={{ title: 'Détail produit' }}
       />
+      <HistoryStackNav.Screen
+        name="Comparator"
+        component={ComparatorScreen}
+        options={{ title: 'Comparateur' }}
+      />
     </HistoryStackNav.Navigator>
   );
 }
@@ -129,6 +145,11 @@ function FavoritesStackNavigator() {
         name="ProductDetail"
         component={ProductDetailScreen}
         options={{ title: 'Détail produit' }}
+      />
+      <FavoritesStackNav.Screen
+        name="Comparator"
+        component={ComparatorScreen}
+        options={{ title: 'Comparateur' }}
       />
     </FavoritesStackNav.Navigator>
   );
