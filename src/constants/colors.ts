@@ -22,6 +22,15 @@ export const NOVA_COLORS: Record<number, string> = {
   4: '#E63E11',
 };
 
+// Couleurs Eco-Score
+export const ECOSCORE_COLORS: Record<string, string> = {
+  a: '#038141',
+  b: '#85BB2F',
+  c: '#FECB02',
+  d: '#EE8100',
+  e: '#E63E11',
+};
+
 // Thème clair
 export const LIGHT_THEME: ThemeColors = {
   background: '#F5F5F5',

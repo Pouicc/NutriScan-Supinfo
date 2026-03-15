@@ -11,8 +11,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Animated,
+  Platform,
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { fetchProductByBarcode } from '../utils/api';
@@ -82,6 +84,11 @@ const ScannerScreen: React.FC = () => {
     setLoading(true);
     setError(null);
 
+    // Retour haptique au scan
+    if (Platform.OS !== 'web') {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
+
     try {
       const result = await fetchProductByBarcode(data, lang);
 
@@ -96,6 +103,10 @@ const ScannerScreen: React.FC = () => {
       navigation.navigate('ProductDetail', { barcode: data, product: result });
     } catch (err) {
       setError(t('networkErrorMsg'));
+      // Retour haptique erreur
+      if (Platform.OS !== 'web') {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      }
     } finally {
       setLoading(false);
     }

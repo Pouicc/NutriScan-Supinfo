@@ -99,6 +99,21 @@ export const translations = {
     addFavoritesHint: 'Ajoutez des produits à vos favoris',
     noAllergensDeclared: 'Aucun allergène déclaré.',
 
+    // Product Detail - Bonus
+    share: 'Partager',
+    ecoScore: 'Eco-Score',
+
+    // Onboarding
+    onboardingTitle1: 'Bienvenue sur NutriScan',
+    onboardingDesc1: 'Scannez vos produits alimentaires et découvrez leur qualité nutritionnelle.',
+    onboardingTitle2: 'Personnalisez vos alertes',
+    onboardingDesc2: 'Configurez vos allergènes et votre régime alimentaire pour recevoir des alertes.',
+    onboardingTitle3: 'Suivez vos habitudes',
+    onboardingDesc3: 'Consultez votre tableau de bord nutritionnel et comparez les produits.',
+    getStarted: 'Commencer',
+    next: 'Suivant',
+    skip: 'Passer',
+
     // Comparator
     comparatorTitle: 'Comparateur',
     compare: 'Comparer',
@@ -221,6 +236,21 @@ export const translations = {
     clearHistoryConfirm: 'Are you sure you want to delete all history?',
     addFavoritesHint: 'Add products to your favorites',
     noAllergensDeclared: 'No declared allergens.',
+
+    // Product Detail - Bonus
+    share: 'Share',
+    ecoScore: 'Eco-Score',
+
+    // Onboarding
+    onboardingTitle1: 'Welcome to NutriScan',
+    onboardingDesc1: 'Scan your food products and discover their nutritional quality.',
+    onboardingTitle2: 'Customize your alerts',
+    onboardingDesc2: 'Set your allergens and dietary preferences to receive alerts.',
+    onboardingTitle3: 'Track your habits',
+    onboardingDesc3: 'Check your nutrition dashboard and compare products.',
+    getStarted: 'Get started',
+    next: 'Next',
+    skip: 'Skip',
 
     // Comparator
     comparatorTitle: 'Comparator',

@@ -22,6 +22,8 @@ interface DataContextType {
   addCategory: (name: string) => boolean;
   removeCategory: (id: string) => void;
   resetAllData: () => void;
+  hasSeenOnboarding: boolean;
+  setOnboardingComplete: () => void;
 }
 
 const DataContext = createContext<DataContextType>({
@@ -38,29 +40,35 @@ const DataContext = createContext<DataContextType>({
   addCategory: () => false,
   removeCategory: () => {},
   resetAllData: () => {},
+  hasSeenOnboarding: false,
+  setOnboardingComplete: () => {},
 });
 
 const HISTORY_KEY = '@nutriscan_history';
 const FAVORITES_KEY = '@nutriscan_favorites';
 const CATEGORIES_KEY = '@nutriscan_categories';
+const ONBOARDING_KEY = '@nutriscan_onboarding';
 
 export const DataProvider = ({ children }: { children: ReactNode }) => {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [favorites, setFavorites] = useState<FavoriteEntry[]>([]);
   const [categories, setCategories] = useState<FavoriteCategory[]>(DEFAULT_FAVORITE_CATEGORIES);
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
 
   // Charger les données persistées au démarrage
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [savedHistory, savedFavorites, savedCategories] = await Promise.all([
+        const [savedHistory, savedFavorites, savedCategories, savedOnboarding] = await Promise.all([
           AsyncStorage.getItem(HISTORY_KEY),
           AsyncStorage.getItem(FAVORITES_KEY),
           AsyncStorage.getItem(CATEGORIES_KEY),
+          AsyncStorage.getItem(ONBOARDING_KEY),
         ]);
         if (savedHistory) setHistory(JSON.parse(savedHistory));
         if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
         if (savedCategories) setCategories(JSON.parse(savedCategories));
+        if (savedOnboarding === 'true') setHasSeenOnboarding(true);
       } catch (error) {
         console.error('Erreur chargement données:', error);
       }
@@ -173,6 +181,13 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     ]);
   }, []);
 
+  // ==================== ONBOARDING ====================
+
+  const setOnboardingComplete = useCallback(async () => {
+    setHasSeenOnboarding(true);
+    await AsyncStorage.setItem(ONBOARDING_KEY, 'true');
+  }, []);
+
   return (
     <DataContext.Provider
       value={{
@@ -180,6 +195,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
         favorites, addToFavorites, removeFromFavorites, moveFavorite, isFavorite,
         categories, addCategory, removeCategory,
         resetAllData,
+        hasSeenOnboarding, setOnboardingComplete,
       }}
     >
       {children}

@@ -13,7 +13,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
+  Share,
+  Platform,
 } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScannerStackParamList, Product } from '../types';
@@ -24,6 +27,7 @@ import NovaBadge from '../components/NovaBadge';
 import LoadingIndicator from '../components/LoadingIndicator';
 import { useTranslation } from '../hooks/useTranslation';
 import { useData } from '../context/DataContext';
+import { ECOSCORE_COLORS } from '../constants/colors';
 
 type RouteProps = RouteProp<ScannerStackParamList, 'ProductDetail'>;
 type NavigationProp = NativeStackNavigationProp<ScannerStackParamList, 'ProductDetail'>;
@@ -73,8 +77,22 @@ const ProductDetailScreen: React.FC = () => {
   const handleSelectCategory = (categoryId: string) => {
     if (product) {
       addToFavorites(product, categoryId);
+      if (Platform.OS !== 'web') {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      }
     }
     setShowCategoryModal(false);
+  };
+
+  const handleShare = async () => {
+    if (!product) return;
+    try {
+      await Share.share({
+        message: `${product.product_name || 'Produit'} (${product.brands || ''}) - Nutri-Score: ${(product.nutriscore_grade || '?').toUpperCase()} - via NutriScan`,
+      });
+    } catch (err) {
+      // Ignoré
+    }
   };
 
   if (loading) {
@@ -138,6 +156,22 @@ const ProductDetailScreen: React.FC = () => {
           <Text style={styles.scoreLabel}>{t('novaGroup').toUpperCase()}</Text>
           <NovaBadge group={product.nova_group} showDescription size="medium" />
         </View>
+
+        {product.ecoscore_grade && (
+          <View style={styles.scoreItem}>
+            <Text style={styles.scoreLabel}>{t('ecoScore').toUpperCase()}</Text>
+            <View
+              style={[
+                styles.ecoScoreBadge,
+                { backgroundColor: ECOSCORE_COLORS[product.ecoscore_grade.toLowerCase()] || '#9CA3AF' },
+              ]}
+            >
+              <Text style={styles.ecoScoreText}>
+                {product.ecoscore_grade.toUpperCase()}
+              </Text>
+            </View>
+          </View>
+        )}
       </View>
 
       {/* Tableau nutritionnel */}
@@ -197,8 +231,16 @@ const ProductDetailScreen: React.FC = () => {
         onPress={() => navigation.navigate('Comparator', { product1: product })}
         activeOpacity={0.7}
       >
-        <Text style={styles.compareIcon}>⚖️</Text>
         <Text style={styles.compareText}>{t('compare')}</Text>
+      </TouchableOpacity>
+
+      {/* Bouton partager */}
+      <TouchableOpacity
+        style={styles.shareButton}
+        onPress={handleShare}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.shareText}>{t('share')}</Text>
       </TouchableOpacity>
 
       {/* Bouton favori */}
@@ -382,13 +424,38 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8F5E9',
     gap: 8,
   },
-  compareIcon: {
-    fontSize: 20,
-  },
   compareText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#4CAF50',
+  },
+  shareButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 16,
+    marginTop: 8,
+    paddingVertical: 14,
+    borderRadius: 12,
+    backgroundColor: '#E3F2FD',
+    gap: 8,
+  },
+  shareText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1976D2',
+  },
+  ecoScoreBadge: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ecoScoreText: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '800',
   },
   favoriteButton: {
     flexDirection: 'row',
