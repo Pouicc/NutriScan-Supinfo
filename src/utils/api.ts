@@ -111,3 +111,23 @@ export const formatNutrient = (value?: number, unit: string = 'g'): string => {
   if (unit === 'kcal') return `${Math.round(value)} kcal`;
   return `${value.toFixed(1)} ${unit}`;
 };
+
+/**
+ * Convertit une lettre Nutri-Score en valeur numérique (A=5, B=4, C=3, D=2, E=1)
+ */
+export const nutriScoreToNumber = (grade?: string): number => {
+  if (!grade) return 0;
+  const map: Record<string, number> = { a: 5, b: 4, c: 3, d: 2, e: 1 };
+  return map[grade.toLowerCase()] || 0;
+};
+
+/**
+ * Convertit une valeur numérique en lettre Nutri-Score
+ */
+export const numberToNutriScore = (value: number): string => {
+  if (value >= 4.5) return 'a';
+  if (value >= 3.5) return 'b';
+  if (value >= 2.5) return 'c';
+  if (value >= 1.5) return 'd';
+  return 'e';
+};

@@ -16,6 +16,7 @@ import {
   ScannerStackParamList,
   SearchStackParamList,
   HistoryStackParamList,
+  DashboardStackParamList,
   FavoritesStackParamList,
   SettingsStackParamList,
 } from '../types';
@@ -28,12 +29,14 @@ import HistoryScreen from '../screens/HistoryScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ComparatorScreen from '../screens/ComparatorScreen';
+import DashboardScreen from '../screens/DashboardScreen';
 
 // ==================== STACK NAVIGATORS ====================
 
 const ScannerStackNav = createNativeStackNavigator<ScannerStackParamList>();
 const SearchStackNav = createNativeStackNavigator<SearchStackParamList>();
 const HistoryStackNav = createNativeStackNavigator<HistoryStackParamList>();
+const DashboardStackNav = createNativeStackNavigator<DashboardStackParamList>();
 const FavoritesStackNav = createNativeStackNavigator<FavoritesStackParamList>();
 const SettingsStackNav = createNativeStackNavigator<SettingsStackParamList>();
 
@@ -155,6 +158,25 @@ function FavoritesStackNavigator() {
   );
 }
 
+function DashboardStackNavigator() {
+  const { colors } = useTheme();
+  return (
+    <DashboardStackNav.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.card },
+        headerTintColor: colors.text,
+        headerTitleStyle: { color: colors.text },
+      }}
+    >
+      <DashboardStackNav.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{ title: 'Dashboard' }}
+      />
+    </DashboardStackNav.Navigator>
+  );
+}
+
 function SettingsStackNavigator() {
   const { colors } = useTheme();
   return (
@@ -245,6 +267,16 @@ const AppNavigator: React.FC = () => {
             tabBarLabel: t('favorites'),
             tabBarIcon: ({ focused, color }) => (
               <TabIcon emoji="⭐" focused={focused} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="DashboardTab"
+          component={DashboardStackNavigator}
+          options={{
+            tabBarLabel: t('dashboard'),
+            tabBarIcon: ({ focused, color }) => (
+              <TabIcon emoji="📊" focused={focused} color={color} />
             ),
           }}
         />

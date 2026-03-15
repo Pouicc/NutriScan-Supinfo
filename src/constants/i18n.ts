@@ -73,6 +73,17 @@ export const translations = {
     deleteCategoryConfirm: 'Supprimer cette catégorie ? Les produits seront déplacés dans « Sans catégorie ».',
     categoryExists: 'Cette catégorie existe déjà.',
 
+    // Dashboard
+    dashboard: 'Tableau de bord',
+    dashboardTitle: 'Tableau de bord nutritionnel',
+    averageScore: 'Score moyen',
+    totalScans: 'Produits scannés',
+    bestScore: 'Meilleur score',
+    worstScore: 'Pire score',
+    weeklyEvolution: 'Évolution hebdomadaire',
+    noDashboardData: 'Pas assez de données',
+    noDashboardDataMsg: 'Scannez des produits pour voir vos statistiques !',
+
     // Additional
     retry: 'Réessayer',
     networkErrorMsg: 'Erreur réseau. Vérifiez votre connexion internet.',
@@ -184,6 +195,17 @@ export const translations = {
     removeFromFavorites: 'Remove from favorites',
     deleteCategoryConfirm: 'Delete this category? Products will be moved to "Uncategorized".',
     categoryExists: 'This category already exists.',
+
+    // Dashboard
+    dashboard: 'Dashboard',
+    dashboardTitle: 'Nutrition dashboard',
+    averageScore: 'Average score',
+    totalScans: 'Products scanned',
+    bestScore: 'Best score',
+    worstScore: 'Worst score',
+    weeklyEvolution: 'Weekly evolution',
+    noDashboardData: 'Not enough data',
+    noDashboardDataMsg: 'Scan products to see your statistics!',
 
     // Additional
     retry: 'Retry',

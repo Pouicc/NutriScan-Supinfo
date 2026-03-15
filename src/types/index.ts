@@ -66,8 +66,13 @@ export type RootTabParamList = {
   ScannerTab: undefined;
   SearchTab: undefined;
   HistoryTab: undefined;
+  DashboardTab: undefined;
   FavoritesTab: undefined;
   SettingsTab: undefined;
+};
+
+export type DashboardStackParamList = {
+  Dashboard: undefined;
 };
 
 export type ScannerStackParamList = {
