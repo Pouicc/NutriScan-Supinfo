@@ -57,7 +57,6 @@ const SettingsScreen: React.FC = () => {
         {/* Dark Mode */}
         <View style={styles.settingRow}>
           <View style={styles.settingLabel}>
-            <Text style={styles.settingIcon}>{isDark ? '🌙' : '☀️'}</Text>
             <Text style={[styles.settingText, { color: colors.text }]}>{isDark ? t('darkMode') : t('lightMode')}</Text>
           </View>
           <Switch
@@ -72,7 +71,6 @@ const SettingsScreen: React.FC = () => {
         <View style={[styles.divider, { backgroundColor: colors.border }]} />
         <View style={styles.settingRow}>
           <View style={styles.settingLabel}>
-            <Text style={styles.settingIcon}>🌐</Text>
             <Text style={[styles.settingText, { color: colors.text }]}>{t('language')}</Text>
           </View>
           <View style={styles.langButtons}>
@@ -86,7 +84,7 @@ const SettingsScreen: React.FC = () => {
               activeOpacity={0.7}
             >
               <Text style={[styles.langText, lang === 'fr' && styles.langTextActive]}>
-                🇫🇷 FR
+                FR
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -99,7 +97,7 @@ const SettingsScreen: React.FC = () => {
               activeOpacity={0.7}
             >
               <Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>
-                🇬🇧 EN
+                EN
               </Text>
             </TouchableOpacity>
           </View>
@@ -182,7 +180,6 @@ const SettingsScreen: React.FC = () => {
           onPress={handleReset}
           activeOpacity={0.7}
         >
-          <Text style={styles.dangerIcon}>⚠️</Text>
           <Text style={[styles.dangerText, { color: colors.error }]}>{t('resetAll')}</Text>
         </TouchableOpacity>
       </View>

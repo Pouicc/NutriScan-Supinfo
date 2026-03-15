@@ -32,8 +32,10 @@ const ScannerScreen: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Animation du cadre de scan
+  // Animation du cadre de scan (pulsation)
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  // Animation de la ligne de scan (haut en bas)
+  const scanLineAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const pulse = Animated.loop(
@@ -51,8 +53,28 @@ const ScannerScreen: React.FC = () => {
       ])
     );
     pulse.start();
-    return () => pulse.stop();
-  }, [pulseAnim]);
+
+    const scanLine = Animated.loop(
+      Animated.sequence([
+        Animated.timing(scanLineAnim, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scanLineAnim, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    scanLine.start();
+
+    return () => {
+      pulse.stop();
+      scanLine.stop();
+    };
+  }, [pulseAnim, scanLineAnim]);
 
   const handleBarCodeScanned = async ({ data }: { type: string; data: string }) => {
     if (scanned || loading) return;
@@ -134,6 +156,21 @@ const ScannerScreen: React.FC = () => {
           <View style={[styles.corner, styles.topRight]} />
           <View style={[styles.corner, styles.bottomLeft]} />
           <View style={[styles.corner, styles.bottomRight]} />
+
+          {/* Ligne de scan animée */}
+          <Animated.View
+            style={[
+              styles.scanLine,
+              {
+                transform: [{
+                  translateY: scanLineAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, 220],
+                  }),
+                }],
+              },
+            ]}
+          />
         </Animated.View>
 
         <View style={styles.bottomArea}>
@@ -205,6 +242,20 @@ const styles = StyleSheet.create({
     width: 260,
     height: 260,
     position: 'relative',
+    overflow: 'hidden',
+  },
+  scanLine: {
+    position: 'absolute',
+    top: 20,
+    left: 10,
+    right: 10,
+    height: 2,
+    backgroundColor: '#4CAF50',
+    shadowColor: '#4CAF50',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 6,
+    elevation: 3,
   },
   corner: {
     position: 'absolute',

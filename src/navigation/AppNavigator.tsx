@@ -42,6 +42,11 @@ const SettingsStackNav = createNativeStackNavigator<SettingsStackParamList>();
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
+// Animation de transition slide horizontal pour les stacks
+const slideTransition = {
+  animation: 'slide_from_right' as const,
+};
+
 function ScannerStackNavigator() {
   const { colors } = useTheme();
   return (
@@ -50,6 +55,7 @@ function ScannerStackNavigator() {
         headerStyle: { backgroundColor: colors.card },
         headerTintColor: colors.text,
         headerTitleStyle: { color: colors.text },
+        ...slideTransition,
       }}
     >
       <ScannerStackNav.Screen
@@ -79,6 +85,7 @@ function SearchStackNavigator() {
         headerStyle: { backgroundColor: colors.card },
         headerTintColor: colors.text,
         headerTitleStyle: { color: colors.text },
+        ...slideTransition,
       }}
     >
       <SearchStackNav.Screen
@@ -108,6 +115,7 @@ function HistoryStackNavigator() {
         headerStyle: { backgroundColor: colors.card },
         headerTintColor: colors.text,
         headerTitleStyle: { color: colors.text },
+        ...slideTransition,
       }}
     >
       <HistoryStackNav.Screen
@@ -137,6 +145,7 @@ function FavoritesStackNavigator() {
         headerStyle: { backgroundColor: colors.card },
         headerTintColor: colors.text,
         headerTitleStyle: { color: colors.text },
+        ...slideTransition,
       }}
     >
       <FavoritesStackNav.Screen
@@ -199,7 +208,7 @@ function SettingsStackNavigator() {
 // ==================== TAB ICON ====================
 
 const TabIcon = ({ emoji, focused }: { emoji: string; focused: boolean; color: string }) => (
-  <Text style={{ fontSize: focused ? 26 : 22, opacity: focused ? 1 : 0.6 }}>
+  <Text style={{ fontSize: 24, opacity: focused ? 1 : 0.6, marginBottom: -4 }}>
     {emoji}
   </Text>
 );
@@ -220,9 +229,9 @@ const AppNavigator: React.FC = () => {
           tabBarStyle: {
             backgroundColor: colors.card,
             borderTopColor: colors.border,
-            paddingBottom: Platform.OS === 'ios' ? 20 : 8,
+            paddingBottom: Platform.OS === 'ios' ? 20 : 24,
             paddingTop: 8,
-            height: Platform.OS === 'ios' ? 88 : 68,
+            height: Platform.OS === 'ios' ? 88 : 88,
           },
           tabBarLabelStyle: {
             fontSize: 11,

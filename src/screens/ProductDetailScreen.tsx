@@ -19,7 +19,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScannerStackParamList, Product } from '../types';
 import { fetchProductByBarcode } from '../utils/api';
 import { formatNutrient } from '../utils/api';
-import NutriScoreBadge from '../components/NutriScoreBadge';
+import AnimatedNutriScore from '../components/AnimatedNutriScore';
 import NovaBadge from '../components/NovaBadge';
 import LoadingIndicator from '../components/LoadingIndicator';
 import { useTranslation } from '../hooks/useTranslation';
@@ -84,7 +84,6 @@ const ProductDetailScreen: React.FC = () => {
   if (error || !product) {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorIcon}>⚠️</Text>
         <Text style={styles.errorText}>{error || t('productNotFound')}</Text>
       </View>
     );
@@ -111,7 +110,6 @@ const ProductDetailScreen: React.FC = () => {
         <Image source={{ uri: imageUrl }} style={styles.productImage} resizeMode="contain" />
       ) : (
         <View style={[styles.productImage, styles.placeholderImage]}>
-          <Text style={styles.placeholderText}>📦</Text>
           <Text style={styles.placeholderLabel}>{t('noImageAvailable')}</Text>
         </View>
       )}
@@ -133,7 +131,7 @@ const ProductDetailScreen: React.FC = () => {
       <View style={styles.scoresSection}>
         <View style={styles.scoreItem}>
           <Text style={styles.scoreLabel}>{t('nutriScore').toUpperCase()}</Text>
-          <NutriScoreBadge grade={product.nutriscore_grade} size="large" />
+          <AnimatedNutriScore grade={product.nutriscore_grade} size="large" />
         </View>
 
         <View style={styles.scoreItem}>

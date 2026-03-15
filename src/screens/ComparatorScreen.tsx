@@ -157,7 +157,7 @@ const ComparatorScreen: React.FC = () => {
           <Image source={{ uri: imageUrl }} style={styles.productImage} resizeMode="cover" />
         ) : (
           <View style={[styles.productImage, styles.placeholderImage]}>
-            <Text style={{ fontSize: 28 }}>📦</Text>
+            <Text style={[styles.productName, { color: colors.textSecondary }]}>{t('noImageAvailable')}</Text>
           </View>
         )}
         <Text style={[styles.productName, { color: colors.text }]} numberOfLines={2}>

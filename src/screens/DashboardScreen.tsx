@@ -10,7 +10,7 @@ import { useData } from '../context/DataContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { nutriScoreToNumber, numberToNutriScore } from '../utils/api';
 import { NUTRISCORE_COLORS } from '../constants/colors';
-import NutriScoreBadge from '../components/NutriScoreBadge';
+import AnimatedNutriScore from '../components/AnimatedNutriScore';
 import EmptyState from '../components/EmptyState';
 
 const DashboardScreen: React.FC = () => {
@@ -101,7 +101,7 @@ const DashboardScreen: React.FC = () => {
           {t('averageScore')}
         </Text>
         <View style={styles.mainScoreRow}>
-          <NutriScoreBadge grade={stats.averageGrade} size="large" />
+          <AnimatedNutriScore grade={stats.averageGrade} size="large" />
           <Text style={[styles.mainScoreValue, { color: NUTRISCORE_COLORS[stats.averageGrade] }]}>
             {stats.average.toFixed(1)}/5
           </Text>
@@ -111,19 +111,16 @@ const DashboardScreen: React.FC = () => {
       {/* Statistiques rapides */}
       <View style={styles.statsRow}>
         <View style={[styles.statCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <Text style={styles.statIcon}>📱</Text>
           <Text style={[styles.statValue, { color: colors.text }]}>{stats.totalScans}</Text>
           <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('totalScans')}</Text>
         </View>
         <View style={[styles.statCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <Text style={styles.statIcon}>🏆</Text>
           <Text style={[styles.statValue, { color: NUTRISCORE_COLORS[stats.bestGrade] }]}>
             {stats.bestGrade.toUpperCase()}
           </Text>
           <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{t('bestScore')}</Text>
         </View>
         <View style={[styles.statCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <Text style={styles.statIcon}>📉</Text>
           <Text style={[styles.statValue, { color: NUTRISCORE_COLORS[stats.worstGrade] }]}>
             {stats.worstGrade.toUpperCase()}
           </Text>
